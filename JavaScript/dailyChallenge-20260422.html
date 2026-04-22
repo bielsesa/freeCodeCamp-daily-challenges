@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Challenge 20260422</title>
+</head>
+
+<body>
+    <button onclick="main()">Run Main</button>
+
+    <script>
+        let previousItem;
+
+        function main() {
+            console.log('First test: ', getCleanupScore(["bottle", "straw", "shoe", "battery"]) === 44);
+            console.log('Second test: ', getCleanupScore(["electronics", "straw", "newspaper", "bottle", "bag"]) === 58);
+            console.log('Third test: ', getCleanupScore(["shoe", "can", "can", "can", "bottle", "bottle", "straw", "straw", "straw"]) === 79);
+            console.log('Fourth test: ', getCleanupScore(["mattress", ["rare", 80], "tire", "tire", "tire", ["rare", 95]]) === 358);
+            console.log('Fifth test: ', getCleanupScore(["bottle", "can", "can", "shoe", "shoe", ["rare", 56], "bottle", "bottle", "can", "can", "electronics", "bottle", ["rare", 48], "bottle", "can", "can", "can", "can", "can", "can", "can"]) === 383);
+        }
+
+        function getCleanupScore(items) {
+
+            let sum = 0;
+
+            for (let i = 0; i < items.length; i++) {
+                let currentItem = items[i];
+
+                // rare item
+                if (currentItem.isArray) {
+                    sum += currentItem[0];
+                    previousItem = undefined;
+                    continue;
+                }
+
+                let itemTotalValue = getNormalItemPoints(currentItem);
+
+                if (previousItem !== undefined) {
+
+                }
+
+                sum += itemTotalValue;
+                previousItem = currentItem;
+            }
+
+            return sum;
+        }
+
+        function getNormalItemPoints(item) {
+            switch (item) {
+                case "bottle":
+                    return 10;
+                case "can":
+                    return 6;
+                case "bag":
+                    return 8;
+                case "tire":
+                    return 35;
+                case "straw":
+                    return 4;
+                case "cardboard":
+                    return 3;
+                case "newspaper":
+                    return 3;
+                case "shoe":
+                    return 12;
+                case "electronics":
+                    return 25;
+                case "battery":
+                    return 18;
+                case "mattress":
+                    return 38;
+            }
+        }
+    </script>
+</body>
+
+</html>

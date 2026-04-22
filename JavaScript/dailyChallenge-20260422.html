@@ -14,11 +14,25 @@
         let previousItem;
 
         function main() {
-            console.log('First test: ', getCleanupScore(["bottle", "straw", "shoe", "battery"]) === 44);
-            console.log('Second test: ', getCleanupScore(["electronics", "straw", "newspaper", "bottle", "bag"]) === 58);
-            console.log('Third test: ', getCleanupScore(["shoe", "can", "can", "can", "bottle", "bottle", "straw", "straw", "straw"]) === 79);
-            console.log('Fourth test: ', getCleanupScore(["mattress", ["rare", 80], "tire", "tire", "tire", ["rare", 95]]) === 358);
-            console.log('Fifth test: ', getCleanupScore(["bottle", "can", "can", "shoe", "shoe", ["rare", 56], "bottle", "bottle", "can", "can", "electronics", "bottle", ["rare", 48], "bottle", "can", "can", "can", "can", "can", "can", "can"]) === 383);
+            // First test
+            let result = getCleanupScore(["bottle", "straw", "shoe", "battery"]);
+            console.log(`First test: ${result}, is ${result === 44}`);
+
+            // Second test
+            result = getCleanupScore(["electronics", "straw", "newspaper", "bottle", "bag"]);
+            console.log(`Second test: ${result}, is ${result === 58}`);
+
+            // Third test
+            result = getCleanupScore(["shoe", "can", "can", "can", "bottle", "bottle", "straw", "straw", "straw"]);
+            console.log(`Third test: ${result}, is ${result === 79}`);
+
+            // Fourth test
+            result = getCleanupScore(["mattress", ["rare", 80], "tire", "tire", "tire", ["rare", 95]]);
+            console.log(`Fourth test: ${result}, is ${result === 358}`);
+            
+            // Fifth test
+            result = getCleanupScore(["bottle", "can", "can", "shoe", "shoe", ["rare", 56], "bottle", "bottle", "can", "can", "electronics", "bottle", ["rare", 48], "bottle", "can", "can", "can", "can", "can", "can", "can"]);
+            console.log(`Fifth test: ${result}, is ${result === 383}`);
         }
 
         function getCleanupScore(items) {
@@ -38,11 +52,24 @@
                 let itemTotalValue = getNormalItemPoints(currentItem);
 
                 if (previousItem !== undefined) {
-
+                    if (previousItem.item === currentItem) {
+                        itemTotalValue += previousItem.bonusTimes;
+                        previousItem.bonusTimes++;
+                    } else {
+                        previousItem = {item: currentItem, bonusTimes: 0};
+                    }
                 }
 
-                sum += itemTotalValue;
-                previousItem = currentItem;
+                let fifthItemBonus = 1;
+
+                if ((i + 1) % 5 === 0) {
+                    fifthItemBonus = i / 5 + 1;
+                }
+
+                sum += itemTotalValue * fifthItemBonus;
+                if (previousItem === undefined) {
+                    previousItem = {item: currentItem, bonusTimes: 0};
+                }
             }
 
             return sum;
